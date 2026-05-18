@@ -124,6 +124,7 @@ class QuantitativeTradingEngine:
                 await self.notifier.send_signal_alert(signal_payload)
             else:
                 logger.info("Scalper Status: Checking book liquidity. No anomalies found.")
+                await self.notifier.send_signal_alert({"status": "HEARTBEAT", "msg": f"Cloud scalper active. Live ETH Close: ${current_price:,.2f}"})
                 
         except Exception as e:
             logger.error(f"Execution Error inside Scalper Core Loop: {e}")
