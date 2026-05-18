@@ -39,15 +39,7 @@ class QuantitativeTradingEngine:
         self.perf_logger = SystemPerformanceLogger()
         self.ai_gate = GeminiIntelligenceGate()
         
-        self.exchange = ccxt.kucoin({
-            'enableRateLimit': True,
-            'urls': {
-                'api': {
-                    'public': 'https://api.binance.us/api/v3' if os.environ.get('PORT') else 'https://api.binance.com/api/v3'
-                }
-            },
-            'options': {'defaultType': 'spot' if os.environ.get('PORT') else 'future'}
-        })
+        self.exchange = ccxt.kucoin({'enableRateLimit': True})
         
         self.model_path = "models/xgboost_meta_v1.json"
 
