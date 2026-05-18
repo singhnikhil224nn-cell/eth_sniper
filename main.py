@@ -41,7 +41,12 @@ class QuantitativeTradingEngine:
         
         self.exchange = ccxt.binance({
             'enableRateLimit': True,
-            'options': {'defaultType': 'future'}
+            'urls': {
+                'api': {
+                    'public': 'https://api.binance.us/api/v3' if os.environ.get('PORT') else 'https://api.binance.com/api/v3'
+                }
+            },
+            'options': {'defaultType': 'spot' if os.environ.get('PORT') else 'future'}
         })
         
         self.model_path = "models/xgboost_meta_v1.json"
