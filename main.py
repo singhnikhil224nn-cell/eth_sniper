@@ -73,11 +73,8 @@ class QuantitativeTradingEngine:
                 "Order book liquidity clusters building around local psychological levels."
             ]
 
-            ai_filters = self.ai_gate.analyze_market_narrative(simulated_news_feed)
-            
-            if ai_filters['regime_override'] == "SHUTDOWN":
-                logger.critical("GEMINI FUNDAMENTAL OVERRIDE DETECTED: FORCED SYSTEM COLD SHUTDOWN.")
-                return
+            # Gemini AI Gate deactivated. Running on pure mathematical indicators.
+            ai_filters = {'sentiment_score': 0.0, 'risk_multiplier': 1.0, 'regime_override': 'NONE'}
 
             current_signal = 0
             applied_strategy = "None"
@@ -119,7 +116,7 @@ class QuantitativeTradingEngine:
                     "stop_loss": f"${(current_price - (1.0 * atr)):,.2f}" if direction == "LONG" else f"${(current_price + (1.0 * atr)):,.2f}",
                     "tp1 (Scalp Target)": f"${(current_price + (1.5 * atr)):,.2f}" if direction == "LONG" else f"${(current_price - (1.5 * atr)):,.2f}",
                     "tp2 (Runner)": f"${(current_price + (3.0 * atr)):,.2f}" if direction == "LONG" else f"${(current_price - (3.0 * atr)):,.2f}",
-                    "ml_prob": f"XGBoost Scalp Matrix Verified // Gemini Multiplier: {ai_filters['sentiment_score']}",
+                    "ml_prob": f"XGBoost Scalp Matrix Verified // Pure Math Matrix Verified",
                     "risk_size": f"{adjusted_risk_pct:.2f}% // Quant Size: {adjusted_quantity:.4f} ETH",
                     "timestamp": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                 }
