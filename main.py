@@ -21,7 +21,7 @@ class QuantitativeTradingEngine:
         self.sizer = PositionSizer()
         self.notifier = TelegramNotifier()
         
-        self.exchange = ccxt.binance({
+        self.exchange = ccxt.kucoin({
             'enableRateLimit': True,
             'options': {'defaultType': 'future'}
         })
