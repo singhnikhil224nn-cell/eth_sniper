@@ -39,7 +39,7 @@ class QuantitativeTradingEngine:
         self.perf_logger = SystemPerformanceLogger()
         self.ai_gate = GeminiIntelligenceGate()
         
-        self.exchange = ccxt.binanceusdm({
+        self.exchange = ccxt.kucoin({
             'enableRateLimit': True,
             'urls': {
                 'api': {
