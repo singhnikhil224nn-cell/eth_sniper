@@ -124,15 +124,6 @@ class QuantitativeTradingEngine:
                 await self.notifier.send_signal_alert(signal_payload)
             else:
                 logger.info("Scalper Status: Checking book liquidity. No anomalies found.")
-                # Bulletproof text payload with no external structural dependencies
-                test_payload = {
-                    "symbol": "ETH/USDT (5M HEARTBEAT)",
-                    "direction": "PING",
-                    "entry_range": f"${current_price:,.2f}",
-                    "regime": "SYSTEM_HEALTHY",
-                    "risk_size": "0.00% (Testing Loop)"
-                }
-                await self.notifier.send_signal_alert(test_payload)
                 
         except Exception as e:
             logger.error(f"Execution Error inside Scalper Core Loop: {e}")
