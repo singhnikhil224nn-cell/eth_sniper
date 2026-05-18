@@ -1,0 +1,15 @@
+
+venv/
+
+__pycache__/
+
+*.pyc
+
+logs/daily_telemetry.csv
+
+logs/engine_output.log
+
+.DS_Store
+
+.env
+
