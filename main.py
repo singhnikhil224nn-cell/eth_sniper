@@ -55,7 +55,7 @@ class QuantitativeTradingEngine:
         try:
             logger.info("New market cycle triggered. Fetching direct public data bars...")
             
-            ohlcv = await self.exchange.fetch_ohlcv("ETH/USDT", timeframe="1h", limit=100)
+            ohlcv = await self.exchange.fetch_ohlcv("ETH/USDT", timeframe="5m", limit=100)
             df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
             df.set_index('timestamp', inplace=True)
@@ -122,7 +122,7 @@ class QuantitativeTradingEngine:
         try:
             while True:
                 await self.run_cycle()
-                logger.info("Sleeping execution thread for 1 hour until next candle close...")
+                logger.info("Sleeping execution thread for 5 minutes until next candle close...")
                 await asyncio.sleep(3600)
         finally:
             await self.exchange.close()
