@@ -1,5 +1,23 @@
 import asyncio
+
 import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from threading import Thread
+
+class HealthCheck(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Cloud Scalper Online")
+    def log_message(self, format, *args): 
+        pass # Keep logs clean
+
+def start_server():
+    port = int(os.environ.get("PORT", 10000))
+    HTTPServer(('0.0.0.0', port), HealthCheck).serve_forever()
+
+Thread(target=start_server, daemon=True).start()
+
 import ccxt.async_support as ccxt
 import pandas as pd
 from datetime import datetime
