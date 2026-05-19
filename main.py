@@ -109,7 +109,21 @@ class QuantitativeTradingEngine:
                     "timestamp": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                 }
                 
-                await self.notifier.send_signal_alert(signal_payload)
+                # --- GEMINI AI LOGIC GATE ---
+                from ai_gate import GeminiFilter
+                ai_filter = GeminiFilter()
+                is_approved = ai_filter.evaluate_trade(
+                    symbol=signal_payload['symbol'],
+                    direction=signal_payload['direction'],
+                    price=current_price,
+                    regime=signal_payload['regime']
+                )
+
+                if is_approved:
+                    signal_payload['ml_prob'] = str(signal_payload['ml_prob']) + ' // 🧠 AI Approved'
+                    await self.notifier.send_signal_alert(signal_payload)
+                else:
+                    logger.warning(f"🧠 AI VETO: Gemini rejected the {signal_payload['direction']} setup. Trade aborted.")
             else:
                 logger.info("Signal Pipeline Status: Scan complete. No strategy setups confirmed.")
                 
