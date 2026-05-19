@@ -1,3 +1,8 @@
+import os
+os.environ['TELEGRAM_BOT_TOKEN'] = '8992654694:AAHXHrcq8YsppzFUlSRH99CAdQ9dmUUnnQo'
+os.environ['TELEGRAM_CHAT_ID'] = '7366145742'
+os.environ['TG_BOT_TOKEN'] = '8992654694:AAHXHrcq8YsppzFUlSRH99CAdQ9dmUUnnQo'
+os.environ['TG_CHAT_ID'] = '7366145742'
 import asyncio
 from telegram import Bot
 from loguru import logger
