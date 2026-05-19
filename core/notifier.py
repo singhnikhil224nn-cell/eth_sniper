@@ -48,7 +48,7 @@ class TelegramNotifier:
                 response = requests.post(url, json=payload)
                 
                 if response.status_code == 200:
-                    logger.success("Signal alert successfully dispatched to Telegram mobile endpoint.")
+                    logger.info("Signal alert successfully dispatched to Telegram mobile endpoint.")
                 else:
                     logger.error(f"Failed to transmit Telegram dispatch: {response.text}")
             except Exception as e:
