@@ -123,7 +123,7 @@ class QuantitativeTradingEngine:
             while True:
                 await self.run_cycle()
                 logger.info("Sleeping execution thread for 5 minutes until next candle close...")
-                await asyncio.sleep(3600)
+                await asyncio.sleep(300)
         finally:
             await self.exchange.close()
 
