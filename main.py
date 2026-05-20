@@ -50,12 +50,12 @@ class QuantitativeTradingEngine:
         else:
             logger.warning("No ML weights found. Engine running on Heuristic Fallback Mode.")
 
-    async def run_cycle(self):
+    async def run_cycle(self, symbol):
         """Runs a single end-to-end quantitative cycle across all alpha and risk modules."""
         try:
             logger.info("New market cycle triggered. Fetching direct public data bars...")
             
-            ohlcv = await self.exchange.fetch_ohlcv("ETH/USDT", timeframe="5m", limit=100)
+            ohlcv = await self.exchange.fetch_ohlcv(symbol, timeframe="5m", limit=100)
             df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
             df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
             df.set_index('timestamp', inplace=True)
@@ -97,7 +97,7 @@ class QuantitativeTradingEngine:
                 )
                 
                 signal_payload = {
-                    "symbol": "ETH/USDT",
+                    "symbol": symbol,
                     "direction": direction,
                     "regime": f"TREND ({applied_strategy})" if adx >= 25 else f"RANGE ({applied_strategy})",
                     "entry_range": f"${current_price:,.2f}",
@@ -131,12 +131,19 @@ class QuantitativeTradingEngine:
             logger.error(f"Execution Error inside Master Core Loop: {e}")
 
     async def start_infinite_loop(self):
-        """Keeps the engine polling every hour for structural shifts."""
-        logger.success("Engine successfully deployed live into production.")
+        logger.success("Multi-Asset Engine successfully deployed live into production.")
+        self.target_assets = ['ETH/USDT', 'SOL/USDT']
         try:
             while True:
-                await self.run_cycle()
-                logger.info("Sleeping execution thread for 5 minutes until next candle close...")
+                for asset in self.target_assets:
+                    logger.info(f"--- Initiating Market Scan: {asset} ---")
+                    try:
+                        await self.run_cycle(symbol=asset)
+                    except Exception as e:
+                        logger.error(f"Scan failed for {asset}: {e}")
+                    await asyncio.sleep(2)  # Micro-pause to prevent KuCoin API bans
+                
+                logger.info("Radar sweep complete. Sleeping for 5 minutes...")
                 await asyncio.sleep(300)
         finally:
             await self.exchange.close()
