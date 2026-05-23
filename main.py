@@ -1,34 +1,5 @@
 import asyncio
 import os
-import threading
-from http.server import BaseHTTPRequestHandler, HTTPServer
-
-# --- THE SMART DUMMY SERVER (RAILWAY KEEPALIVE) ---
-class HealthCheck(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Bot is alive and hunting.")
-        
-    def log_message(self, format, *args): 
-        pass # Mutes the web server logs so they don't spam your trading terminal
-
-def start_server():
-    # Railway assigns a specific PORT dynamically. Locally, we default to 8080.
-    port = int(os.environ.get("PORT", 8080))
-    try:
-        server = HTTPServer(('0.0.0.0', port), HealthCheck)
-        server.serve_forever()
-    except OSError:
-        # If 8080 is blocked by another bot on your Mac, smoothly switch to 8081
-        fallback_port = 8081
-        server = HTTPServer(('0.0.0.0', fallback_port), HealthCheck)
-        server.serve_forever()
-
-# Start the dummy web server quietly in the background
-threading.Thread(target=start_server, daemon=True).start()
-
-# --- THE QUANTITATIVE ENGINE ---
 import ccxt.async_support as ccxt
 import pandas as pd
 from datetime import datetime
